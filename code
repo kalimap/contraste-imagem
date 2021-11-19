@@ -1,0 +1,86 @@
+# meu primeiro.PROGRAMA.com.br
+# autor: data
+#######################################
+# importar bibliotecas
+import numpy as np        # biblioteca de calculos
+import matplotlib.pyplot as plt       # para plotar
+#######################################
+
+
+## Detecção de Max e Min
+# ler a imagem
+B1= plt.imread('Mrs_Bean.gif')
+
+#Numero de linhas e colunas
+#nl, nc = B1.shape
+#print(nl, nc)
+nl = B1.shape [0]
+nc = B1.shape [1]
+#nb = B1.shape [2]
+print(nl, nc)
+
+#B1 = B1[:,:,3]
+
+#Detectar o valor máximo e mínimo de nivel de cinza
+max=np.max(B1)
+min=np.min(B1)
+print('min e max =', min, max)
+
+
+##Histograma
+
+#Alocar variavel com 256 valores nulos para histograma
+h=np.zeros(256)
+
+#Definir valores iniciais para L e C antes do loop
+L=0
+C=0
+
+#Contador para acumular valores no histograma
+
+#Loop para Varrer todas as linhas
+for L in range (nl):
+
+    #Loop para Varrer todas as colunas
+    for C in range (nc):
+
+        #Elemento da matriz B1 da L-ésima linha e N-ésima coluna
+        v=B1[L,C]
+
+        #Adicionar +1 para cada vez que o elemento se repete
+        h[v]=h[v]+1
+
+#Plotar o histograma
+plt.plot(h,label='histograma')
+plt.show()
+
+
+##Aplicar Contraste
+
+#Criar copia da imagem em matriz float
+C1=np.array(B1, dtype=float)
+
+#Detectar o valor máximo e mínimo de nivel de cinza
+maxi=np.max(C1)
+mini=np.min(C1)
+
+print(mini,maxi)
+
+#Descobrir coeficientes da funcao linear do contraste (ax+b)
+a=(255-0)/(maxi-mini)
+b= - a * mini
+
+#Aplicar contraste na copia da imagem
+C1=a*C1 +b
+
+#Detectar o valor máximo e mínimo de nivel de cinza da imagem apos aplicacao do contraste
+maxi=np.max(C1)
+mini=np.min(C1)
+print(mini, maxi)
+
+#Transformar copia da imagem para int 8 bits
+B2=np.uint8(np.round( C1))
+
+#Plotar nova imagem
+plt.imsave('Mrs_Bean_teste.gif',B2,cmap='gray')
+plt.show()
